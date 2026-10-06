@@ -1,0 +1,37 @@
+# Runs arinc429_datasource.examples.benchmark from the deployed wheel. Override
+# the size per run: --params word_count=2000000
+resources:
+  jobs:
+    arinc429_benchmark:
+      name: "arinc429 - benchmark"
+
+      parameters:
+        - name: word_count
+          default: "500000"
+        - name: scratch_dir
+          default: "${var.scratch_dir}"
+
+      tasks:
+        - task_key: benchmark
+          environment_key: default
+          max_retries: 0
+          python_wheel_task:
+            package_name: arinc429_datasource
+            entry_point: arinc429-benchmark
+            parameters:
+              - "{{job.parameters.word_count}}"
+              - --scratch-dir
+              - "{{job.parameters.scratch_dir}}"
+
+      environments:
+        - environment_key: default
+          spec:
+            # Keep in sync with `databricks environments setup-local --serverless-version`.
+            environment_version: "5"
+            # A bare package name plus --find-links lets pip choose the x86_64 or
+            # aarch64 wheel to match the node the task lands on.
+            dependencies:
+              - --find-links ${workspace.artifact_path}/.internal/
+              - arinc429-datasource
+      queue:
+        enabled: true

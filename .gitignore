@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+dist/
+*.egg-info/
+
+# Compiled extension (built into python/ by `uv sync` / `maturin develop`)
+*.so
+
+# Demo data written by generate_demo_file
+*.arinc429
+
+# Rust / maturin
+target/
+
+# Databricks CLI bundle state
+.databricks/
+
+# Editors
+.vscode/
+.idea/
+.DS_Store

@@ -1,0 +1,18 @@
+[package]
+name = "arinc429-spark"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "PyO3 and Arrow bindings that expose arinc429-sdk to a PySpark data source"
+publish = false
+
+[lib]
+# Must match the last part of `module-name` in pyproject.toml.
+name = "_arinc429"
+crate-type = ["cdylib"]
+
+[dependencies]
+arinc429-sdk = { path = "../arinc429-sdk" }
+pyo3 = "0.29"
+arrow = { version = "60", default-features = false, features = ["pyarrow"] }

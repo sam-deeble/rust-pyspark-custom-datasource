@@ -1,0 +1,36 @@
+bundle:
+  name: arinc429-datasource
+
+variables:
+  scratch_dir:
+    description: >-
+      Path in an existing Unity Catalog volume the example jobs can write to,
+      e.g. /Volumes/main/default/scratch. Each run uses (and then deletes) its
+      own subdirectory.
+
+# Serverless can schedule on x86_64 or aarch64 (arm64), so build a wheel for each; the job
+# environments let pip pick the one that matches the node (see resources/*.yml).
+artifacts:
+  x86_64:
+    type: whl
+    path: .
+    build: uv run maturin build --release --target x86_64-unknown-linux-gnu --zig --compatibility manylinux_2_17 -i python3.12
+    dynamic_version: true
+    files:
+      - source: ./target/wheels/*_x86_64.whl
+
+  aarch64:
+    type: whl
+    path: .
+    build: uv run maturin build --release --target aarch64-unknown-linux-gnu --zig --compatibility manylinux_2_17 -i python3.12
+    dynamic_version: true
+    files:
+      - source: ./target/wheels/*_aarch64.whl
+
+include:
+  - resources/*.yml
+
+targets:
+  dev:
+    mode: development
+    default: true

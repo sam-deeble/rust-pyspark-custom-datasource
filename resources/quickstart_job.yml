@@ -1,0 +1,33 @@
+# Runs arinc429_datasource.examples.quickstart from the deployed wheel.
+resources:
+  jobs:
+    arinc429_quickstart:
+      name: "arinc429 - quickstart"
+
+      parameters:
+        - name: scratch_dir
+          default: "${var.scratch_dir}"
+
+      tasks:
+        - task_key: quickstart
+          environment_key: default
+          max_retries: 0
+          python_wheel_task:
+            package_name: arinc429_datasource
+            entry_point: arinc429-quickstart
+            parameters:
+              - --scratch-dir
+              - "{{job.parameters.scratch_dir}}"
+
+      environments:
+        - environment_key: default
+          spec:
+            # Keep in sync with `databricks environments setup-local --serverless-version`.
+            environment_version: "5"
+            # A bare package name plus --find-links lets pip choose the x86_64 or
+            # aarch64 wheel to match the node the task lands on.
+            dependencies:
+              - --find-links ${workspace.artifact_path}/.internal/
+              - arinc429-datasource
+      queue:
+        enabled: true

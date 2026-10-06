@@ -1,0 +1,18 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/arinc429-sdk",
+    "crates/arinc429-spark",
+]
+# arinc429-spark (the PyO3 extension) is built by maturin, which points PyO3 at
+# the uv-managed Python. Plain `cargo build`/`cargo test` only touch the SDK.
+default-members = ["crates/arinc429-sdk"]
+
+[workspace.package]
+edition = "2024"
+rust-version = "1.88"
+license = "MIT"
+
+[profile.release]
+lto = true
+codegen-units = 1

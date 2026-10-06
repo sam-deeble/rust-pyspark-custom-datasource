@@ -1,0 +1,8 @@
+[toolchain]
+# Pinned so lints added in newer releases don't break CI.
+channel = "1.99.0"
+profile = "minimal"
+components = ["rustfmt", "clippy"]
+# Databricks serverless runs on both; the wheels are cross-compiled with
+# `maturin build --zig` (see databricks.yml).
+targets = ["x86_64-unknown-linux-gnu", "aarch64-unknown-linux-gnu"]

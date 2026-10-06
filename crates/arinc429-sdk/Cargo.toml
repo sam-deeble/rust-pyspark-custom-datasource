@@ -1,0 +1,10 @@
+[package]
+name = "arinc429-sdk"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "A standalone Rust library for decoding ARINC 429 words"
+publish = false
+
+[dependencies]
